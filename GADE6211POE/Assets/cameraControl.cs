@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class cameraControl : MonoBehaviour
 {
+    private float speed;
+
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 3);
+        GetComponent<Rigidbody>().velocity = new Vector3(0, 0, speed);
     }
 
     // Update is called once per frame

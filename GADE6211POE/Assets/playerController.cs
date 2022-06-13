@@ -7,15 +7,23 @@ public class playerController : MonoBehaviour
 {
     private Vector3 jump, movie;
     private Rigidbody charControl;
-    private bool ghost;
+    public Animator anim;
+    private bool ghost, onGround;
     private int score;
     public Text scores, deathScreen;
+    public float speed, jumpVal, grav, checkDist;
+    private void Awake()
+    {
+        GameObject.Find("GameController").GetComponent<gameController>().Speed = speed;
+        GameObject.Find("Main Camera").GetComponent<cameraControl>().Speed = speed;
+    }
     // Start is called before the first frame update
     void Start()
     {
         charControl = gameObject.GetComponent<Rigidbody>();
         jump = new Vector3(0f, 5f, 0f);
         movie = new Vector3(0f, 0f, 1f);
+        onGround = true;
         ghost = false;
         score = 0;
         deathScreen.text = "";
@@ -24,14 +32,26 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            charControl.AddForce(jump * 1.5f, ForceMode.Impulse);
+        if (Input.GetKeyDown(KeyCode.Space) && onGround)
+        {
+            charControl.AddForce(jump * jumpVal, ForceMode.Impulse);
+            anim.Play("Jump");
+        }
+        if (Physics.Raycast(transform.position, Vector3.down, checkDist))
+        {
+            onGround = true;
+        }
+        else
+        {
+            onGround = false;
+        }
         movie = new Vector3(Input.GetAxis("Horizontal"), 0f, 1f);
     }
 
     private void FixedUpdate()
     {
-        charControl.MovePosition(transform.position + (movie * 3 * Time.deltaTime));
+        charControl.AddForce(Physics.gravity * (grav - 1) * charControl.mass);
+        charControl.MovePosition(transform.position + (movie * speed * Time.deltaTime));
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -50,6 +70,10 @@ public class playerController : MonoBehaviour
         {
             ghost = true;
             Destroy(collision.gameObject);
+        }
+        if(collision.other.tag == "Floor")
+        {
+            anim.Play("Run");
         }
     }
 
