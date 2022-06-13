@@ -6,9 +6,12 @@ using UnityEngine;
 public class gameController : MonoBehaviour
 {
     public GameObject[] floors;
-    public GameObject builder;
-    public int tracker, z, rand;
+    public GameObject builder, boss;
+    Vector3 bossMove;
+    private GameObject bossPlay;
+    public int tracker, z, rand, bossTimer;
     private double round;
+    private bool bossActive;
     private float speed;
     public float Speed
     {
@@ -19,7 +22,7 @@ public class gameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SceneManager.LoadScene("MainMenu");
+        bossActive = false;
         z = 0;
         tracker = 42;
         for (int j = 1; j < 21; j++)
@@ -45,17 +48,66 @@ public class gameController : MonoBehaviour
         {
             z = tracker;
             rand = Random.Range(0, 10);
-            round = Random.Range(1, 99) / 33 + 1;
-            if (rand < 8)
-                Instantiate(floors[0], new Vector3(0, 0, z), Quaternion.identity);
-            else if (rand <= 9 && rand > 8)
-                Instantiate(floors[System.Convert.ToInt32(System.Math.Ceiling(round))], new Vector3(0, 0, z), Quaternion.identity);
+            if (!bossActive)
+            {
+                switch (rand)
+                {
+                    default: Instantiate(floors[0], new Vector3(0, 0, z), Quaternion.identity); break;
+                    case 7: Instantiate(floors[1], new Vector3(0, 0, z), Quaternion.identity); break;
+                    case 8: Instantiate(floors[2], new Vector3(0, 0, z), Quaternion.identity); break;
+                    case 9: Instantiate(floors[3], new Vector3(0, 0, z), Quaternion.identity); break;
+                }
+                rand = Random.Range(0, 100);
+                if (rand > 90)
+                {
+                    GetComponent<ItemSpawner>().SpawnItem();
+                }
+            }
             else
-                Instantiate(floors[System.Convert.ToInt32(System.Math.Ceiling(round+3))], new Vector3(0, 0, z), Quaternion.identity);
-            rand = Random.Range(0, 100);
+                Instantiate(floors[0], new Vector3(0, 0, z), Quaternion.identity);
             tracker += 2;
         }
+        bossTimer++;
+        if (bossTimer >= 1000 && bossTimer < 10000)
+        {
+            bossTimer = 10000;
+            StartCoroutine(Boss());
+        }
+        if(bossPlay != null)
+            bossPlay.GetComponent<Rigidbody>().MovePosition(transform.position + (bossMove * speed * Time.deltaTime));
     }
 
-    
+    IEnumerator Boss()
+    {
+        int bossAttacks = Random.Range(1, 6);
+        bossActive = true;
+        bossMove = new Vector3(0, 0f, speed);
+        bossPlay = Instantiate(boss, new Vector3(0, 6, z - 35), Quaternion.identity);
+        if (bossPlay != null)
+            bossPlay.GetComponent<Rigidbody>().MovePosition(bossPlay.transform.position + (bossMove * Time.deltaTime));
+        for (int i = 0; i < bossAttacks; i++)
+        {
+            rand = Random.Range(0, 9);
+            if (rand < 5)
+            {
+                yield return new WaitForSeconds(Random.Range(3, 7));
+                bossPlay.GetComponent<Animator>().Play("LeftWind");
+                yield return new WaitForSeconds(Random.Range(3, 7));
+                bossPlay.GetComponent<Animator>().Play("LeftShoot");
+            }
+            else
+            {
+                yield return new WaitForSeconds(Random.Range(3, 7));
+                bossPlay.GetComponent<Animator>().Play("RightWind");
+                yield return new WaitForSeconds(Random.Range(3, 7));
+                bossPlay.GetComponent<Animator>().Play("RightShoot");
+            }
+            yield return new WaitForSeconds(Random.Range(1, 4));
+            bossPlay.GetComponent<Animator>().Play("Float");
+        }
+        Destroy(bossPlay);
+        yield return new WaitForSeconds(5);
+        bossTimer = 0;
+        bossActive = false;
+    }
 }

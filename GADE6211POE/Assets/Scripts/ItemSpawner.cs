@@ -12,69 +12,39 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnItem();
+        //SpawnItem();
     }
     public void SpawnItem()
-    { //Coin Spawn
-        int coinsToSpawn = 10;
-
-        for (int i = 0; i < coinsToSpawn; i++)
+    {
+        GameObject temp;
+        int rand = Random.Range(0, 10);
+        switch (rand)
         {
-          GameObject temp =   Instantiate(coinPrefab);
-            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
-
+            //Pick-up spawn 1
+            case 7: temp = Instantiate(pickup1Prefab); temp.transform.eulerAngles = new Vector3(0, 90, 0); break;
+            //Pick-up spawn 2
+            case 8: temp = Instantiate(pickup2Prefab); temp.transform.eulerAngles = new Vector3(0, 90, 0); break;
+            //Pick-up spawn 3
+            case 9: temp = Instantiate(pickup3Prefab); temp.transform.eulerAngles = new Vector3(0, 90, 0); break;
+            //Coin Spawn
+            default: temp = Instantiate(coinPrefab); temp.transform.eulerAngles = new Vector3(90, 0, 0); break;
         }
-
-        //Pick-up spawn
-
-        int pickup1Spawn = 1;
-
-        for (int i = 0; i < pickup1Spawn; i++)
-        {
-            GameObject temp = Instantiate(pickup1Prefab);
-            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
-
-        }
-
-        //Pick-up spawn
-
-        int pickup2Spawn = 1;
-
-        for (int i = 0; i < pickup2Spawn; i++)
-        {
-            GameObject temp = Instantiate(pickup2Prefab);
-            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
-
-        }
-          int pickup3Spawn = 1;
-
-        for (int i = 0; i < pickup3Spawn; i++)
-        {
-            GameObject temp = Instantiate(pickup3Prefab);
-            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
-
-        }
-
-
+        temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
     }
 
     Vector3 GetRandomPointInCollider(Collider collider)
     {
-
-
         Vector3 point = new Vector3 (
             Random.Range(collider.bounds.min.x, collider.bounds.max.x),
             Random.Range(collider.bounds.min.y, collider.bounds.max.y),
             Random.Range(collider.bounds.min.z, collider.bounds.max.z));
 
         if (point != collider.ClosestPoint(point))
-        
         {
             point = GetRandomPointInCollider(collider);
         }
 
-        point.y = 1;
+        point.y = 3;
         return point;
-
     }
 }

@@ -66,11 +66,6 @@ public class playerController : MonoBehaviour
                 ghost = false; 
             }  
         }
-        if (collision.other.tag == "Pickup")
-        {
-            ghost = true;
-            Destroy(collision.gameObject);
-        }
         if(collision.other.tag == "Floor")
         {
             anim.Play("Run");
@@ -83,6 +78,14 @@ public class playerController : MonoBehaviour
         {
             score++;
             scores.text = "Score: " + score.ToString();
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Pickup")
+        {
+            ghost = true;
+            Destroy(other.gameObject);
         }
     }
 

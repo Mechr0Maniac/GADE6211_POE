@@ -15,17 +15,16 @@ public GameObject coinDetectorObj;
         coinDetectorObj.SetActive(false);
     }
 
-  private void OnTriggerEnter(Collider other)
-  {
-if (other.gameObject.tag == "Player");
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
 
-{
-StartCoroutine(ActivateCoin());
-Destroy(transform.GetChild(0).gameObject);
+        {
+            StartCoroutine(ActivateCoin());
+            Destroy(transform.GetChild(0).gameObject);
+        }
 
-}
-
-  }
+    }
 
 
 IEnumerator ActivateCoin()
