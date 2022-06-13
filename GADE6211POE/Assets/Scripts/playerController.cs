@@ -11,7 +11,7 @@ public class playerController : MonoBehaviour
     private bool ghost, onGround;
     private int score;
     public Text scores, deathScreen;
-    public float speed, jumpVal, grav, checkDist;
+    public float speed, trackSpeed, jumpVal, grav, checkDist;
     private void Awake()
     {
         GameObject.Find("GameController").GetComponent<gameController>().Speed = speed;
@@ -26,6 +26,7 @@ public class playerController : MonoBehaviour
         onGround = true;
         ghost = false;
         score = 0;
+        trackSpeed = speed;
         deathScreen.text = "";
     }
 
@@ -82,10 +83,22 @@ public class playerController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Pickup")
+        if (other.tag == "Magnet")
+        {
+            GameObject[] coins = GameObject.FindGameObjectsWithTag("Coin");
+            foreach (GameObject coin in coins)
+                coin.GetComponent<CoinMove>().Active = true;
+            Destroy(other.gameObject);
+        }
+        if (other.tag == "Shield")
         {
             ghost = true;
             Destroy(other.gameObject);
+        }
+        if (other.tag == "Boost")
+        {
+            Destroy(other.gameObject);
+            StartCoroutine(Booster());
         }
     }
 
@@ -93,5 +106,23 @@ public class playerController : MonoBehaviour
     {
         scores.text = "";
         deathScreen.text = "You Died \n \n Score: " + score.ToString();
+    }
+
+    IEnumerator Booster()
+    {
+        charControl.useGravity = false;
+        transform.position = new Vector3(transform.position.x, 3f, transform.position.z);
+        speed = 12;
+        GameObject.Find("GameController").GetComponent<gameController>().Speed = speed;
+        GameObject.Find("Main Camera").GetComponent<cameraControl>().Speed = speed;
+        yield return new WaitForSeconds(9);
+
+        speed = trackSpeed;
+        GameObject.Find("GameController").GetComponent<gameController>().Speed = speed;
+        GameObject.Find("Main Camera").GetComponent<cameraControl>().Speed = speed;
+        yield return new WaitForSeconds(2);
+        
+        transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
+        charControl.useGravity = true;
     }
 }

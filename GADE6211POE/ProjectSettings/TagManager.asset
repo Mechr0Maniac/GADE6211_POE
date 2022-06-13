@@ -7,6 +7,10 @@ TagManager:
   - Obstacle
   - Pickup
   - Floor
+  - Magnet
+  - Shield
+  - Boost
+  - Coin
   layers:
   - Default
   - TransparentFX

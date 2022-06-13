@@ -6,6 +6,14 @@ public class CoinMove : MonoBehaviour
 {
 
     coinSpeen coinScript;
+    private bool acitve;
+
+    public bool Active
+    {
+        get { return acitve; }
+        set { acitve = value; }
+    }
+
 
 
     // Start is called before the first frame update
@@ -17,7 +25,8 @@ public class CoinMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      transform.position = Vector3.MoveTowards(transform.position, coinScript.playerTransform.position, coinScript.moveSpeed * Time.deltaTime);
+        if (acitve)
+            StartCoroutine(Absorb());
     }
 
 private void OnTriggerEnter(Collider other)
@@ -28,5 +37,12 @@ private void OnTriggerEnter(Collider other)
         Destroy(gameObject);
     }
 }
+    IEnumerator Absorb()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, coinScript.playerTransform.position,
+            coinScript.moveSpeed * Time.deltaTime);
+        yield return new WaitForSeconds(7);
+        acitve = false;
+    }
 
 }
