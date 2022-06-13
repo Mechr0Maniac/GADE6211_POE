@@ -11,17 +11,18 @@ public class GameOverScreen : MonoBehaviour
     {
         gameObject.SetActive(true);
         pointText.text = score.ToString() + "Points";
+        
 
     }
 
     public void RestartButton()
     {
-        SceneManager.LoadScene("");
+        SceneManager.LoadScene("SampleScene");
     }
 
     public void ExitButton()
     {
 
-        SceneManager.LoadScene("");
+         Application.Quit();
     }
 }

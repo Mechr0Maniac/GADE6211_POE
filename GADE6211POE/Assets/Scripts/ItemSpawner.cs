@@ -6,6 +6,8 @@ public class ItemSpawner : MonoBehaviour
 {
     public GameObject coinPrefab;
     public GameObject pickup1Prefab;
+    public GameObject pickup2Prefab;
+    public GameObject pickup3Prefab;
 
 
     private void Start()
@@ -33,6 +35,26 @@ public class ItemSpawner : MonoBehaviour
             temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
 
         }
+
+        //Pick-up spawn
+
+        int pickup2Spawn = 1;
+
+        for (int i = 0; i < pickup2Spawn; i++)
+        {
+            GameObject temp = Instantiate(pickup2Prefab);
+            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
+
+        }
+          int pickup3Spawn = 1;
+
+        for (int i = 0; i < pickup3Spawn; i++)
+        {
+            GameObject temp = Instantiate(pickup3Prefab);
+            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
+
+        }
+
 
     }
 
