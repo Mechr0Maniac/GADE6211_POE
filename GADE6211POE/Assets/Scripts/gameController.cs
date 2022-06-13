@@ -12,6 +12,7 @@ public class gameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SceneManager.LoadScene("MainMenu");
         z = 0;
         tracker = 14;
         for (int j = 1; j < 7; j++)
@@ -48,4 +49,6 @@ public class gameController : MonoBehaviour
             tracker += 2;
         }
     }
+
+    
 }
