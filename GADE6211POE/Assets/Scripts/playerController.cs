@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
@@ -104,8 +105,12 @@ public class playerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        scores.text = "";
-        deathScreen.text = "You Died \n \n Score: " + score.ToString();
+
+        SceneManager.LoadScene("GameOver");
+        
+        scores.text = "Score:";
+        
+       
     }
 
     IEnumerator Booster()

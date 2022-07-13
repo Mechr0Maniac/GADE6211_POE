@@ -10,7 +10,8 @@ public class GameOverScreen : MonoBehaviour
    public void Setup(int score)
     {
         gameObject.SetActive(true);
-        pointText.text = score.ToString() + "Points";
+        
+        pointText.text = "You Died \n \n Score: " + score.ToString();;
         
 
     }
@@ -23,6 +24,6 @@ public class GameOverScreen : MonoBehaviour
     public void ExitButton()
     {
 
-         Application.Quit();
+         SceneManager.LoadScene("MainMenu");
     }
 }

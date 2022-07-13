@@ -9,10 +9,11 @@ public class SceneManage : MonoBehaviour
     void Start()
     {
 
+
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
 
     }
@@ -24,6 +25,15 @@ public class SceneManage : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+     public void RestartButton()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
+     public void MainMenu()
+    {
+
+         SceneManager.LoadScene("MainMenu");
     }
 
 
